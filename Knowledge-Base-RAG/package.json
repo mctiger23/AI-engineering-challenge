@@ -1,0 +1,18 @@
+{
+  "name": "knowledge-base-rag",
+  "private": true,
+  "version": "0.1.0",
+  "packageManager": "npm@10.8.2",
+  "workspaces": [
+    "apps/*",
+    "packages/*"
+  ],
+  "scripts": {
+    "dev:web": "npm run dev --workspace @kbrag/web",
+    "dev:api": "npm run dev --workspace @kbrag/api",
+    "dev": "npm run dev:web",
+    "build": "npm run build --workspaces",
+    "lint": "npm run lint --workspaces",
+    "typecheck": "npm run typecheck --workspaces"
+  }
+}
