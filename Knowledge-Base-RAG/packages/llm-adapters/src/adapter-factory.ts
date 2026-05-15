@@ -1,4 +1,4 @@
-import { parseConfig } from "../../shared/src/config";
+import { parseConfig } from "@kbrag/shared";
 import { AnthropicAdapter } from "./anthropic.adapter";
 import { AzureOpenAIAdapter } from "./azure-openai.adapter";
 import { GeminiAdapter } from "./gemini.adapter";
