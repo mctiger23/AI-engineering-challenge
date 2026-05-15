@@ -11,8 +11,8 @@
     "dev:web": "npm run dev --workspace @kbrag/web",
     "dev:api": "npm run dev --workspace @kbrag/api",
     "dev": "npm run dev:web",
-    "build": "npm run build --workspaces",
+    "build": "tsc -b tsconfig.json",
     "lint": "npm run lint --workspaces",
-    "typecheck": "npm run typecheck --workspaces"
+    "typecheck": "tsc -b tsconfig.json"
   }
 }
