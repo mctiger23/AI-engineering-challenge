@@ -12,6 +12,8 @@
   "devDependencies": {
     "typescript": "^5.6.0"
   },
+  "dependencies": {
+    "@kbrag/shared": "*"
   "exports": {
     ".": {
       "types": "./dist/index.d.ts",
