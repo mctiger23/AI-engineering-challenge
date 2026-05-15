@@ -5,7 +5,7 @@ import type {
   VectorQueryMatch,
   VectorQueryResult,
   VectorStoreAdapter
-} from '@kbrag/shared/types/vector';
+} from '@kbrag/shared';
 
 export type {
   VectorDocument,

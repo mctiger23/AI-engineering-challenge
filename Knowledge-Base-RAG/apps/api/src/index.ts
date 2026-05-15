@@ -1,14 +1,14 @@
 import cors from 'cors';
 import express, { Request, Response } from 'express';
-import { createChatAdapter, createEmbeddingAdapter } from '../../../packages/llm-adapters/src/adapter-factory';
+import { createChatAdapter, createEmbeddingAdapter } from '@kbrag/llm-adapters';
 import {
   ChatRequestSchema,
   EmbeddingsRequestSchema,
   RagIngestRequestSchema,
   RagSearchRequestSchema,
   VectorFilterSchema,
-} from '../../../packages/shared/src/types/api';
-import { VectorFilter, VectorMetadata } from '../../../packages/shared/src/types/vector';
+} from '@kbrag/shared';
+import { VectorFilter, VectorMetadata } from '@kbrag/shared';
 
 type StoredChunk = {
   id: string;
