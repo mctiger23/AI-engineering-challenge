@@ -7,6 +7,10 @@ import { OllamaAdapter } from "./ollama.adapter";
 import { OpenAIAdapter } from "./openai.adapter";
 import { OpenAICompatibleAdapter } from "./openai-compatible.adapter";
 
+function assertNever(x: never): never {
+  throw new Error(`Unsupported provider: ${x}`);
+}
+
 export function createChatAdapter(env: NodeJS.ProcessEnv = process.env): LLMChatAdapter {
   const config = parseConfig(env);
 
@@ -39,6 +43,8 @@ export function createChatAdapter(env: NodeJS.ProcessEnv = process.env): LLMChat
         config.COMPATIBLE_CHAT_MODEL!,
         config.COMPATIBLE_EMBEDDING_MODEL!,
       );
+    default:
+      return assertNever(config.LLM_PROVIDER);
   }
 }
 
@@ -74,5 +80,7 @@ export function createEmbeddingAdapter(env: NodeJS.ProcessEnv = process.env): Em
         config.COMPATIBLE_CHAT_MODEL!,
         config.COMPATIBLE_EMBEDDING_MODEL!,
       );
+    default:
+      return assertNever(config.EMBEDDING_PROVIDER);
   }
 }
