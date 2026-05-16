@@ -22,3 +22,9 @@ pnpm-debug.log*
 .DS_Store
 .vscode/
 .idea/
+
+
+# Local Files
+/docs
+.codex
+.claude
