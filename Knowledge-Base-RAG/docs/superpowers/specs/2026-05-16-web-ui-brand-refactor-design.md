@@ -120,6 +120,8 @@ Feature components should consume those primitives so future screens inherit the
 - clear submitting state
 - success confirmation after indexing
 - readable error state on failure
+- snackbar/toast confirmation for completed indexing
+- snackbar/toast notice for transient ingest failures, paired with persistent inline feedback
 
 ### Navigation
 
@@ -131,6 +133,13 @@ Feature components should consume those primitives so future screens inherit the
 - Preserve existing API contracts.
 - Chat failures continue to appear in the conversation thread, but should be visually softened into an intentional error treatment.
 - Ingest failures should be shown adjacent to the form result area, not hidden or only logged.
+- Use snackbars/toasts for transient status communication:
+  - ingest completed
+  - ingest failed
+  - provider/runtime configuration load failed
+- Keep durable or inspectable information inline:
+  - chat stream errors remain in-thread
+  - ingest result details remain in the page after the toast disappears
 
 ## Technical boundaries
 
