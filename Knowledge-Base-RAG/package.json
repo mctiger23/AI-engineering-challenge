@@ -2,17 +2,16 @@
   "name": "knowledge-base-rag",
   "private": true,
   "version": "0.1.0",
-  "packageManager": "npm@10.8.2",
+  "packageManager": "yarn@1.22.22",
   "workspaces": [
-    "apps/*",
-    "packages/*"
+    "apps/*"
   ],
   "scripts": {
-    "dev:web": "npm run dev --workspace @kbrag/web",
-    "dev:api": "npm run dev --workspace @kbrag/api",
-    "dev": "npm run dev:web",
+    "dev:web": "yarn workspace @kbrag/web dev",
+    "dev:api": "yarn workspace @kbrag/api dev",
+    "dev": "yarn dev:web",
     "build": "tsc -b tsconfig.json",
-    "lint": "npm run lint --workspaces",
+    "lint": "yarn workspaces run lint",
     "typecheck": "tsc -b tsconfig.json"
   }
 }

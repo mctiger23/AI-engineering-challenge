@@ -13,38 +13,7 @@
     "noUncheckedIndexedAccess": true,
     "declaration": true,
     "declarationMap": true,
-    "sourceMap": true,
-    "baseUrl": ".",
-    "paths": {
-      "@kbrag/shared/*": [
-        "packages/shared/src/*"
-      ],
-      "@kbrag/rag-core/*": [
-        "packages/rag-core/src/*"
-      ],
-      "@kbrag/llm-adapters/*": [
-        "packages/llm-adapters/src/*"
-      ],
-      "@kbrag/vector-store/*": [
-        "packages/vector-store/src/*"
-      ],
-      "@kbrag/shared": [
-        "packages/shared/src/index.ts"
-      ],
-      "@kbrag/rag-core": [
-        "packages/rag-core/src/index.ts"
-      ],
-      "@kbrag/llm-adapters": [
-        "packages/llm-adapters/src/index.ts"
-      ],
-      "@kbrag/vector-store": [
-        "packages/vector-store/src/index.ts"
-      ]
-    }
+    "sourceMap": true
   },
-  "exclude": [
-    "node_modules",
-    "dist",
-    ".next"
-  ]
+  "exclude": ["node_modules", "dist", ".next"]
 }

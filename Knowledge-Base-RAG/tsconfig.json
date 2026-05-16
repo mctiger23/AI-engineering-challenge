@@ -1,20 +1,6 @@
 {
   "files": [],
   "references": [
-    {
-      "path": "./packages/shared"
-    },
-    {
-      "path": "./packages/llm-adapters"
-    },
-    {
-      "path": "./packages/vector-store"
-    },
-    {
-      "path": "./packages/rag-core"
-    },
-    {
-      "path": "./apps/api"
-    }
+    { "path": "./apps/api" }
   ]
 }
