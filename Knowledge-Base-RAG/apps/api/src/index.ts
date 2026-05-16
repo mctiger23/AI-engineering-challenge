@@ -42,9 +42,11 @@ const cosineSimilarity = (a: number[], b: number[]): number => {
   let na = 0;
   let nb = 0;
   for (let i = 0; i < a.length; i += 1) {
-    dot += a[i] * b[i];
-    na += a[i] * a[i];
-    nb += b[i] * b[i];
+    const av = a[i] ?? 0;
+    const bv = b[i] ?? 0;
+    dot += av * bv;
+    na += av * av;
+    nb += bv * bv;
   }
   if (na === 0 || nb === 0) return 0;
   return dot / (Math.sqrt(na) * Math.sqrt(nb));
@@ -69,26 +71,31 @@ const matchesFilters = (metadata: VectorMetadata | undefined, filters: VectorFil
   });
 };
 
-const validate = <T,>(schema: { parse: (v: unknown) => T }, payload: unknown): T => schema.parse(payload);
+const validate = <T,>(schema: { parse: (input: unknown) => T }, payload: unknown): T => schema.parse(payload);
 
 app.post('/api/chat', async (req: Request, res: Response) => {
   try {
-    const body = validate(ChatRequestSchema, req.body);
+    const body = validate<typeof ChatRequestSchema._type>(ChatRequestSchema, req.body);
     const retrievalEnabled = body.retrieval?.enabled ?? false;
 
     let retrievalContext = '';
     if (retrievalEnabled) {
-      const query = body.messages[body.messages.length - 1]?.content ?? '';
+      const hasMessages = body.messages.length > 0;
+      const query = hasMessages ? (body.messages[body.messages.length - 1]?.content ?? '') : '';
       if (query) {
         const { vectors } = await embeddingAdapter.embed([query]);
-        const queryVector = vectors[0] ?? [];
+        const queryVector = vectors[0];
         const topK = body.retrieval?.topK ?? 5;
-        const filters = body.retrieval?.filters ? validate(VectorFilterSchema, body.retrieval.filters) : undefined;
-        const matches = Array.from(vectorStore.values())
-          .filter((chunk) => matchesFilters(chunk.metadata, filters))
-          .map((chunk) => ({ ...chunk, score: cosineSimilarity(queryVector, chunk.vector) }))
-          .sort((a, b) => b.score - a.score)
-          .slice(0, topK);
+        const filters: VectorFilter | undefined = body.retrieval?.filters
+          ? validate<VectorFilter>(VectorFilterSchema, body.retrieval.filters)
+          : undefined;
+        const matches = queryVector
+          ? Array.from(vectorStore.values())
+              .filter((chunk) => matchesFilters(chunk.metadata, filters))
+              .map((chunk) => ({ ...chunk, score: cosineSimilarity(queryVector, chunk.vector) }))
+              .sort((a, b) => b.score - a.score)
+              .slice(0, topK)
+          : [];
         retrievalContext = matches.map((m, i) => `[${i + 1}] ${m.content}`).join('\n\n');
       }
     }
@@ -119,7 +126,7 @@ app.post('/api/chat', async (req: Request, res: Response) => {
 
 app.post('/api/embeddings', async (req: Request, res: Response) => {
   try {
-    const body = validate(EmbeddingsRequestSchema, req.body);
+    const body = validate<typeof EmbeddingsRequestSchema._type>(EmbeddingsRequestSchema, req.body);
     const result = await embeddingAdapter.embed(body.texts);
     res.json({ vectors: result.vectors });
   } catch (error) {
@@ -129,7 +136,7 @@ app.post('/api/embeddings', async (req: Request, res: Response) => {
 
 app.post('/api/rag/ingest', async (req: Request, res: Response) => {
   try {
-    const body = validate(RagIngestRequestSchema, req.body);
+    const body = validate<typeof RagIngestRequestSchema._type>(RagIngestRequestSchema, req.body);
     const pending: Array<{ id: string; content: string; metadata?: VectorMetadata }> = [];
 
     for (const document of body.documents) {
@@ -156,20 +163,22 @@ app.post('/api/rag/ingest', async (req: Request, res: Response) => {
 
 app.post('/api/rag/search', async (req: Request, res: Response) => {
   try {
-    const body = validate(RagSearchRequestSchema, req.body);
+    const body = validate<typeof RagSearchRequestSchema._type>(RagSearchRequestSchema, req.body);
     const { vectors } = await embeddingAdapter.embed([body.query]);
-    const queryVector = vectors[0] ?? [];
+    const queryVector = vectors[0];
 
-    const matches = Array.from(vectorStore.values())
-      .filter((chunk) => matchesFilters(chunk.metadata, body.filters))
-      .map((chunk) => ({
-        id: chunk.id,
-        score: cosineSimilarity(queryVector, chunk.vector),
-        content: chunk.content,
-        metadata: chunk.metadata,
-      }))
-      .sort((a, b) => b.score - a.score)
-      .slice(0, body.topK);
+    const matches = queryVector
+      ? Array.from(vectorStore.values())
+          .filter((chunk) => matchesFilters(chunk.metadata, body.filters))
+          .map((chunk) => ({
+            id: chunk.id,
+            score: cosineSimilarity(queryVector, chunk.vector),
+            content: chunk.content,
+            metadata: chunk.metadata,
+          }))
+          .sort((a, b) => b.score - a.score)
+          .slice(0, body.topK)
+      : [];
 
     res.json({ matches });
   } catch (error) {
