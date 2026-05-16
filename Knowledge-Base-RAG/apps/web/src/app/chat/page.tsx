@@ -1,9 +1,12 @@
 'use client';
 
 import { useEffect, useMemo, useState } from 'react';
+import { toast } from 'sonner';
+import { AppShell } from '../../components/layout/AppShell';
 import { Composer } from '../../components/chat/Composer';
 import { MessageList } from '../../components/chat/MessageList';
 import { SourcesPanel } from '../../components/chat/SourcesPanel';
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '../../components/ui/select';
 import { ChatMessage, Citation, ProviderOption, getRuntimeConfig, streamChat } from '../../lib/api-client';
 
 function uid() {
@@ -28,7 +31,9 @@ export default function ChatPage() {
         const selectedProvider = config.providers.find((p) => p.id === selectedProviderId);
         setModel(selectedProvider?.defaultModel ?? selectedProvider?.models[0] ?? '');
       })
-      .catch(() => undefined);
+      .catch(() => {
+        toast.error('Unable to load runtime configuration');
+      });
   }, []);
 
   const selectedProvider = useMemo(() => providers.find((p) => p.id === provider), [providers, provider]);
@@ -62,46 +67,59 @@ export default function ChatPage() {
   }
 
   return (
-    <main style={{ maxWidth: 1100, margin: '20px auto', padding: 16 }}>
-      <h1>RAG Chat</h1>
-      <p>Runtime provider/model selection is loaded from server-safe configuration (no secrets exposed).</p>
+    <AppShell
+      title="RAG chat"
+      description="Ask questions against your local knowledge base and inspect the retrieved evidence beside each answer."
+      actions={
+        <div className="grid gap-3 sm:grid-cols-2">
+          <div className="min-w-44">
+            <p className="mb-2 text-xs text-muted">Provider</p>
+            <Select
+              value={provider}
+              onValueChange={(nextProvider) => {
+                setProvider(nextProvider);
+                const providerConfig = providers.find((p) => p.id === nextProvider);
+                setModel(providerConfig?.defaultModel ?? providerConfig?.models[0] ?? '');
+              }}
+            >
+              <SelectTrigger>
+                <SelectValue placeholder="Select provider" />
+              </SelectTrigger>
+              <SelectContent>
+                {providers.map((item) => (
+                  <SelectItem key={item.id} value={item.id}>
+                    {item.label}
+                  </SelectItem>
+                ))}
+              </SelectContent>
+            </Select>
+          </div>
 
-      <div style={{ display: 'flex', gap: 8, marginBottom: 12 }}>
-        <label>
-          Provider
-          <select
-            value={provider}
-            onChange={(e) => {
-              const nextProvider = e.target.value;
-              setProvider(nextProvider);
-              const providerConfig = providers.find((p) => p.id === nextProvider);
-              setModel(providerConfig?.defaultModel ?? providerConfig?.models[0] ?? '');
-            }}
-            style={{ marginLeft: 8 }}
-          >
-            {providers.map((item) => (
-              <option key={item.id} value={item.id}>{item.label}</option>
-            ))}
-          </select>
-        </label>
-
-        <label>
-          Model
-          <select value={model} onChange={(e) => setModel(e.target.value)} style={{ marginLeft: 8 }}>
-            {(selectedProvider?.models ?? []).map((item) => (
-              <option key={item} value={item}>{item}</option>
-            ))}
-          </select>
-        </label>
-      </div>
-
-      <div style={{ display: 'grid', gridTemplateColumns: '2fr 1fr', gap: 12 }}>
-        <div style={{ display: 'grid', gap: 12 }}>
+          <div className="min-w-44">
+            <p className="mb-2 text-xs text-muted">Model</p>
+            <Select value={model} onValueChange={setModel}>
+              <SelectTrigger>
+                <SelectValue placeholder="Select model" />
+              </SelectTrigger>
+              <SelectContent>
+                {(selectedProvider?.models ?? []).map((item) => (
+                  <SelectItem key={item} value={item}>
+                    {item}
+                  </SelectItem>
+                ))}
+              </SelectContent>
+            </Select>
+          </div>
+        </div>
+      }
+    >
+      <div className="grid gap-4 xl:grid-cols-[minmax(0,1.7fr)_minmax(320px,1fr)]">
+        <div className="grid gap-4">
           <MessageList messages={messages} />
           <Composer query={query} onQueryChange={setQuery} onSend={onSend} isLoading={isLoading} />
         </div>
         <SourcesPanel citations={citations} />
       </div>
-    </main>
+    </AppShell>
   );
 }

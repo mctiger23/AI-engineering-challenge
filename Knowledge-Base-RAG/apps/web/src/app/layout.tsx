@@ -1,9 +1,14 @@
 import type { ReactNode } from 'react';
+import { Toaster } from '../components/ui/sonner';
+import './globals.css';
 
 export default function RootLayout({ children }: { children: ReactNode }) {
   return (
     <html lang="en">
-      <body style={{ margin: 0, fontFamily: 'Inter, Arial, sans-serif', background: '#f6f7fb' }}>{children}</body>
+      <body className="min-h-screen bg-background text-foreground">
+        {children}
+        <Toaster />
+      </body>
     </html>
   );
 }
