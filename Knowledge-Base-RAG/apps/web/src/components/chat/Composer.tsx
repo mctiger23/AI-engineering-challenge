@@ -1,5 +1,8 @@
 'use client';
 
+import { Button } from '../ui/button';
+import { Textarea } from '../ui/textarea';
+
 type ComposerProps = {
   query: string;
   onQueryChange: (next: string) => void;
@@ -9,17 +12,17 @@ type ComposerProps = {
 
 export function Composer({ query, onQueryChange, onSend, isLoading }: ComposerProps) {
   return (
-    <div style={{ display: 'flex', gap: 8 }}>
-      <textarea
+    <div className="flex flex-col gap-3 md:flex-row md:items-end">
+      <Textarea
         value={query}
         onChange={(e) => onQueryChange(e.target.value)}
         placeholder="Ask a question about your knowledge base"
         rows={4}
-        style={{ flex: 1, padding: 12, borderRadius: 8, border: '1px solid #d1d5db' }}
+        className="min-h-[132px] flex-1"
       />
-      <button onClick={onSend} disabled={!query.trim() || isLoading} style={{ padding: '0 16px', borderRadius: 8 }}>
+      <Button onClick={onSend} disabled={!query.trim() || isLoading} className="md:min-w-28">
         {isLoading ? 'Streaming…' : 'Send'}
-      </button>
+      </Button>
     </div>
   );
 }
