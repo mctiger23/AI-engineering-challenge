@@ -1,6 +1,4 @@
 import type { ChatMessage } from '../../lib/api-client';
-import { Badge } from '../ui/badge';
-import { Card } from '../ui/card';
 import { ScrollArea } from '../ui/scroll-area';
 
 type MessageListProps = {
@@ -10,39 +8,43 @@ type MessageListProps = {
 export function MessageList({ messages }: MessageListProps) {
   if (messages.length === 0) {
     return (
-      <Card className="flex min-h-[420px] items-center justify-center p-8">
-        <div className="max-w-md text-center">
-          <Badge className="mb-4">Ready</Badge>
-          <h3 className="text-xl">Ask the knowledge base</h3>
-          <p className="mt-2 text-sm text-muted">
-            Responses will stream here, with the source evidence held beside the conversation.
+      <div className="flex min-h-[420px] items-center justify-center rounded-xl border border-border bg-surface p-8">
+        <div className="max-w-sm text-center">
+          <div className="mx-auto mb-5 h-px w-12 bg-accent" />
+          <h3 className="text-base font-medium">Ask the knowledge base</h3>
+          <p className="mt-2 text-sm text-muted leading-relaxed">
+            Responses stream here, with source evidence displayed alongside each answer.
           </p>
         </div>
-      </Card>
+      </div>
     );
   }
 
   return (
-    <Card className="p-3">
-      <ScrollArea className="h-[420px] pr-3">
-        <div className="flex flex-col gap-3">
+    <div className="rounded-xl border border-border bg-surface">
+      <ScrollArea className="h-[420px]">
+        <div className="flex flex-col gap-5 p-5">
           {messages.map((message) => (
             <div
               key={message.id}
-              className={`max-w-[85%] rounded-xl border p-4 ${
-                message.role === 'user'
-                  ? 'self-end border-accent/40 bg-accent text-background'
-                  : 'self-start border-border bg-background'
-              }`}
+              className={`flex flex-col ${message.role === 'user' ? 'items-end' : 'items-start'}`}
             >
-              <Badge className={message.role === 'user' ? 'mb-3 border-background/30 text-background' : 'mb-3'}>
-                {message.role}
-              </Badge>
-              <div className="whitespace-pre-wrap text-sm">{message.content}</div>
+              <span className="mb-1.5 px-1 font-mono text-[10px] uppercase tracking-widest text-muted">
+                {message.role === 'user' ? 'you' : 'assistant'}
+              </span>
+              <div
+                className={`max-w-[85%] rounded-xl px-4 py-3 text-sm leading-relaxed ${
+                  message.role === 'user'
+                    ? 'bg-accent text-background'
+                    : 'border border-border bg-background'
+                }`}
+              >
+                <div className="whitespace-pre-wrap">{message.content}</div>
+              </div>
             </div>
           ))}
         </div>
       </ScrollArea>
-    </Card>
+    </div>
   );
 }

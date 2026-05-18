@@ -22,10 +22,13 @@ export function AppShell({ title, description, actions, children }: AppShellProp
 
   return (
     <div className="min-h-screen bg-background lg:grid lg:grid-cols-[220px_minmax(0,1fr)]">
-      <aside className="border-b border-border bg-[#14182A] px-5 py-6 lg:min-h-screen lg:border-b-0 lg:border-r">
+      <aside className="border-b border-border bg-navy-deep px-5 py-6 lg:min-h-screen lg:border-b-0 lg:border-r">
         <div className="mb-8">
           <p className="mb-2 font-mono text-xs text-muted">knowledge base</p>
-          <h1 className="text-xl">RAG desk</h1>
+          <h1 className="flex items-center gap-2 text-xl">
+            <span className="h-2 w-2 shrink-0 rounded-full bg-accent" />
+            RAG desk
+          </h1>
         </div>
         <nav className="flex gap-2 lg:flex-col">
           {navItems.map((item) => {

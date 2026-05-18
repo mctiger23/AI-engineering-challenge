@@ -12,7 +12,8 @@ export default {
         foreground: 'var(--text)',
         muted: 'var(--text-muted)',
         accent: 'var(--accent)',
-        navy: 'var(--accent-navy)'
+        navy: 'var(--accent-navy)',
+        'navy-deep': 'var(--bg-navy)'
       },
       fontFamily: {
         heading: ['var(--font-heading)'],

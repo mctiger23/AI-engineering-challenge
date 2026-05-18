@@ -5,6 +5,7 @@ import { toast } from 'sonner';
 import { ingestDocument, type IngestResponse } from '../../lib/api-client';
 import { Button } from '../ui/button';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '../ui/card';
+import { Input } from '../ui/input';
 import { Textarea } from '../ui/textarea';
 
 export function IngestForm() {
@@ -42,11 +43,10 @@ export function IngestForm() {
         <CardContent className="grid gap-4">
           <label className="grid gap-2 text-sm">
             <span className="text-muted">Source name</span>
-            <input
+            <Input
               value={sourceName}
               onChange={(event) => setSourceName(event.target.value)}
               placeholder="quarterly-report.md"
-              className="h-11 rounded-xl border border-border bg-background px-4 text-foreground outline-none focus:ring-2 focus:ring-accent"
             />
           </label>
 

@@ -10,22 +10,51 @@
   --text-muted: #a1a1a1;
   --accent: #ff5c1a;
   --accent-navy: #1e3a8a;
-  --font-heading: 'Inter', Arial, system-ui, sans-serif;
-  --font-body: 'IBM Plex Sans', Georgia, system-ui, sans-serif;
-  --font-mono: 'JetBrains Mono', Consolas, monospace;
+  --bg-navy: #14182a;
+  --font-heading: var(--font-inter), Arial, system-ui, sans-serif;
+  --font-body: var(--font-ibm-plex-sans), Georgia, system-ui, sans-serif;
+  --font-mono: var(--font-jetbrains-mono), Consolas, monospace;
 }
 
-* {
+*,
+*::before,
+*::after {
   border-color: var(--border);
+  box-sizing: border-box;
+}
+
+::selection {
+  background: var(--accent);
+  color: var(--bg);
+}
+
+::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+::-webkit-scrollbar-thumb {
+  background: var(--border);
+  border-radius: 3px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: var(--text-muted);
 }
 
 html {
-  background: var(--bg);
+  background: linear-gradient(180deg, #0e0e0f 0%, #14182a 100%);
+  background-attachment: fixed;
+  min-height: 100%;
 }
 
 body {
   margin: 0;
-  background: var(--bg);
+  background: transparent;
   color: var(--text);
   font-family: var(--font-body);
   font-size: 16px;
