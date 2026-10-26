@@ -1,30 +1,35 @@
-# Dependencies
-node_modules/
+# Credentials and local environment
+.env
+.env.*
+!.env.example
+*.pem
+*.key
+credentials*.json
 
-# Builds
+# Private inputs and generated traces
+data/*
+!data/README.md
+evaluations/private/
+evaluations/traces/
+outputs/
+logs/
+*.log
+
+# Python
+.venv/
+venv/
+__pycache__/
+*.py[cod]
+.ipynb_checkpoints/
+.pytest_cache/
+
+# JavaScript
+node_modules/
 .next/
 dist/
-out/
 coverage/
 
-# Logs
-npm-debug.log*
-yarn-debug.log*
-yarn-error.log*
-pnpm-debug.log*
-
-# Env
-.env
-.env.local
-.env.*.local
-
-# OS / Editor
+# Local editor/OS files
 .DS_Store
 .vscode/
 .idea/
-
-# Local Env
-.codex
-.claude
-CLAUDE.md
-docs
